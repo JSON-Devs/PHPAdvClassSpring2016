@@ -13,6 +13,7 @@
         require_once '../functions/dbconn.php';
         require_once '../functions/address.php';
         
+        //Initilize all vairables
         $fullname = filter_input(INPUT_POST, 'fullname');
         $email = filter_input(INPUT_POST, 'email');
         $address = filter_input(INPUT_POST, 'address');
@@ -23,10 +24,12 @@
         $errorMessage = [];
         $successMessage = "";
         
+        //Regex values
         $filledInRegex = '/^(?:[A-Za-z0-9]+)(?:[A-Za-z0-9 _]*)$/';
         $zipRegex = '/^[0-9]{5}(?:-[0-9]{4})?$/';
         $emailRegex = '/^[-a-zA-Z0-9~!$%^&*_=+}{\'?]+(\.[-a-zA-Z0-9~!$%^&*_=+}{\'?]+)*@([a-zA-Z0-9_][-a-zA-Z0-9_]*(\.[-a-zA-Z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/';
         
+        //Validation
         if ( isPostRequest() ) {
             if(empty($fullname)){
                 $errorMessage[] = 'Please Fill in your Full Name';

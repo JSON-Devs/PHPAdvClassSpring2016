@@ -9,8 +9,8 @@ function isPostRequest() {
     return ( filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST' );
 }
 
+//Function to add address to the database
 function addAddress($fullname, $email, $address, $city, $state, $zip, $birthday) {
-    
     $db = dbconnect();
     $stmt = $db->prepare("INSERT INTO address SET address_id = NULL, fullname = :fullname, email = :email, addressline1 = :address, city = :city, state = :state, zip = :zip, birthday = :birthday");
     $binds = array(
@@ -25,10 +25,10 @@ function addAddress($fullname, $email, $address, $city, $state, $zip, $birthday)
     if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
         return true;
     }
-    
     return false;
 }
 
+//Function to get all addresses from the database
 function getAllAddress() {
     
     $db = dbconnect();
