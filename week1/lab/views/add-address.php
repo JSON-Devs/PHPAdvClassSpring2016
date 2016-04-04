@@ -21,10 +21,11 @@
         $zip = filter_input(INPUT_POST, 'zip');
         $birthday = filter_input(INPUT_POST, 'birthday');
         $errorMessage = [];
+        $successMessage = "";
         
-        $filledInRegex = '/^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$/';
+        $filledInRegex = '/^(?:[A-Za-z0-9]+)(?:[A-Za-z0-9 _]*)$/';
         $zipRegex = '/^[0-9]{5}(?:-[0-9]{4})?$/';
-        $emailRegex = '/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/';
+        $emailRegex = '/^[-a-zA-Z0-9~!$%^&*_=+}{\'?]+(\.[-a-zA-Z0-9~!$%^&*_=+}{\'?]+)*@([a-zA-Z0-9_][-a-zA-Z0-9_]*(\.[-a-zA-Z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/';
         
         if ( isPostRequest() ) {
             if(empty($fullname)){
@@ -49,8 +50,6 @@
             }
             if(empty($state)){
                 $errorMessage[] = 'Please Fill in your State';
-            }elseif (!preg_match($filledInRegex, $state)) {
-                $errorMessage[] = 'Please Fill in a valid State';
             }
             if(empty($zip)){
                 $errorMessage[] = 'Please Fill in your Zip';
@@ -60,9 +59,12 @@
             if(empty($birthday)){
                 $errorMessage[] = 'Please Fill in your Birthday';
             }
-            if(count($errorMessage[]) == 0){
+            if(count($errorMessage) == 0){
                 if (addAddress($fullname, $email, $address, $city, $state, $zip, $birthday)){
-                    $success = 'Address added successfully!';
+                    $successMessage = 'Address added successfully!';
+                }
+                else{
+                    $errorMessage[] = "Error adding to the database";
                 }
             }
         }
@@ -70,17 +72,75 @@
         ?>
         
         <br/>
+        <a href="../index.php">Home</a>
+        <br/>
         <div class="container">
             <h1>Add Address</h1>
             <form action="#" method="post">   
-               Full Name: <input name="fullname" value="<?php echo $fullname; ?>" /> <br />
-               Email: <input name="email" value="<?php echo $email; ?>" /> <br />
-               Address: <input name="address" value="<?php echo $address; ?>" /> <br />
-               City: <input name="city" value="<?php echo $city; ?>" /> <br />
-               State: <input name="state" value="<?php echo $state; ?>" /> <br />
-               Zip: <input name="zip" value="<?php echo $zip; ?>" /> <br />
-               Birthday: <input type="date" name="birthday" value="<?php echo $birthday; ?>" /> <br /><br />
-               <input type="submit" value="Submit" class="btn btn-primary" />
+                Full Name: <input name="fullname" value="<?php echo $fullname; ?>" /> <br />
+                Email: <input name="email" value="<?php echo $email; ?>" /> <br />
+                Address: <input name="address" value="<?php echo $address; ?>" /> <br />
+                City: <input name="city" value="<?php echo $city; ?>" /> <br />
+                State: <select name="state" id="state">
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="CA">California</option>
+                    <option value="CO">Colorado</option>
+                    <option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option>
+                    <option value="DC">District Of Columbia</option>
+                    <option value="FL">Florida</option>
+                    <option value="GA">Georgia</option>
+                    <option value="HI">Hawaii</option>
+                    <option value="ID">Idaho</option>
+                    <option value="IL">Illinois</option>
+                    <option value="IN">Indiana</option>
+                    <option value="IA">Iowa</option>
+                    <option value="KS">Kansas</option>
+                    <option value="KY">Kentucky</option>
+                    <option value="LA">Louisiana</option>
+                    <option value="ME">Maine</option>
+                    <option value="MD">Maryland</option>
+                    <option value="MA">Massachusetts</option>
+                    <option value="MI">Michigan</option>
+                    <option value="MN">Minnesota</option>
+                    <option value="MS">Mississippi</option>
+                    <option value="MO">Missouri</option>
+                    <option value="MT">Montana</option>
+                    <option value="NE">Nebraska</option>
+                    <option value="NV">Nevada</option>
+                    <option value="NH">New Hampshire</option>
+                    <option value="NJ">New Jersey</option>
+                    <option value="NM">New Mexico</option>
+                    <option value="NY">New York</option>
+                    <option value="NC">North Carolina</option>
+                    <option value="ND">North Dakota</option>
+                    <option value="OH">Ohio</option>
+                    <option value="OK">Oklahoma</option>
+                    <option value="OR">Oregon</option>
+                    <option value="PA">Pennsylvania</option>
+                    <option value="RI">Rhode Island</option>
+                    <option value="SC">South Carolina</option>
+                    <option value="SD">South Dakota</option>
+                    <option value="TN">Tennessee</option>
+                    <option value="TX">Texas</option>
+                    <option value="UT">Utah</option>
+                    <option value="VT">Vermont</option>
+                    <option value="VA">Virginia</option>
+                    <option value="WA">Washington</option>
+                    <option value="WV">West Virginia</option>
+                    <option value="WI">Wisconsin</option>
+                    <option value="WY">Wyoming</option>
+                </select>
+                <script type="text/javascript">
+                    document.getElementById('state').value = "<?php echo $state;?>";
+                </script>
+                <br />
+                Zip: <input name="zip" value="<?php echo $zip; ?>" /> <br />
+                Birthday: <input type="date" name="birthday" value="<?php echo $birthday; ?>" /> <br /><br />
+                <input type="submit" value="Submit" class="btn btn-primary" />
             </form>
         </div>
     </body>

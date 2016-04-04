@@ -3,6 +3,6 @@
 <?php echo $values;?><br /> 
 <?php endforeach; endif; ?></p>
 
-<?php if ( isset($success) ) : ?>
-<p class="bg-success"><?php echo $success; ?></p>
+<?php if ( isset($successMessage) ) : ?>
+<p class="bg-success"><?php echo $successMessage; ?></p>
 <?php endif; ?>

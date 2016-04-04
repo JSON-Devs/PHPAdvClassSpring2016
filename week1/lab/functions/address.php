@@ -14,8 +14,13 @@ function addAddress($fullname, $email, $address, $city, $state, $zip, $birthday)
     $db = dbconnect();
     $stmt = $db->prepare("INSERT INTO address SET address_id = NULL, fullname = :fullname, email = :email, addressline1 = :address, city = :city, state = :state, zip = :zip, birthday = :birthday");
     $binds = array(
-        ":phone" => $phone,
-        ":phonetype" => $phoneType,
+        ":fullname" => $fullname,
+        ":email" => $email,
+        ":address" => $address,
+        ":city" => $city,
+        ":state" => $state,
+        ":zip" => $zip,
+        ":birthday" => $birthday,
     );
     if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
         return true;
