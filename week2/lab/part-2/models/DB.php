@@ -2,7 +2,7 @@
 /**
  * Description of DB
  *
- * @author GFORTI
+ * @author JAYGAGS
  */
 class DB {
     //put your code here

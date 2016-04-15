@@ -2,7 +2,7 @@
 /**
  * Description of Messages
  *
- * @author 001349718
+ * @author JAYGAGS
  */
 class Message implements IMessage {
     

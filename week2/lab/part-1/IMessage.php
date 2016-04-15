@@ -1,8 +1,9 @@
 <?php
 
 /**
- *
- * @author 001349718
+ * IMessage interface
+ * 
+ * @author JAYGAGS
  */
 interface IMessage {
     public function addMessage($key, $msg);
