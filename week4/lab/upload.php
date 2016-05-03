@@ -10,10 +10,12 @@
         
         require_once './autoload.php';
 
-        $file = new File();
+        $file = new Files('upfile');
 
         try {
-            $fileName = $file->upLoad('upfile');
+            $file->fileErrorsCheck();
+            $file->fileSizeCheck();
+            $fileName = $file->fileTypeCheck();
         } catch (RuntimeException $e) {
             $error = $e->getMessage();
         }

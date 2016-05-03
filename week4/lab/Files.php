@@ -12,14 +12,20 @@ class Files{
         $this->setKeyName($keyName);
     }
     
+    public function setKeyName($keyName){
+        $this->keyName = $keyName;
+        
+    }
+
+
     public function fileErrorsCheck(){
         // Undefined | Multiple Files | $_FILES Corruption Attack
         // If this request falls under any of them, treat it invalid.
-        if (!isset($_FILES[$keyName]['error']) || is_array($_FILES[$keyName]['error'])) {
+        if (!isset($_FILES[$this->keyName]['error']) || is_array($_FILES[$this->keyName]['error'])) {
             throw new RuntimeException('Invalid parameters.');
         }
         // Check $_FILES['upfile']['error'] value.
-        switch ($_FILES[$keyName]['error']) {
+        switch ($_FILES[$this->keyName]['error']) {
             case UPLOAD_ERR_OK:
                 break;
             case UPLOAD_ERR_NO_FILE:
@@ -33,7 +39,7 @@ class Files{
     }
     public function fileSizeCheck(){
         // You should also check filesize here. 
-        if ($_FILES[$keyName]['size'] > 1000000) {
+        if ($_FILES[$this->keyName]['size'] > 1000000) {
             throw new RuntimeException('Exceeded filesize limit.');
         }
     }
@@ -53,7 +59,7 @@ class Files{
             'png' => 'image/png',
             'gif' => 'image/gif'
         );
-        $ext = array_search($finfo->file($_FILES[$keyName]['tmp_name']), $validExts, true);
+        $ext = array_search($finfo->file($_FILES[$this->keyName]['tmp_name']), $validExts, true);
 
         if (false === $ext) {
             throw new RuntimeException('Invalid file format.');
@@ -63,14 +69,14 @@ class Files{
         // On this example, obtain safe unique name from its binary data.
 
         $salt = uniqid(mt_rand(), true);
-        $fileName = 'img_' . sha1($salt . sha1_file($_FILES[$keyName]['tmp_name']));
+        $fileName = $ext . '_' . sha1($salt . sha1_file($_FILES[$this->keyName]['tmp_name']));
         $location = sprintf('./uploads/%s.%s', $fileName, $ext);
 
         if (!is_dir('./uploads')) {
             mkdir('./uploads');
         }
 
-        if (!move_uploaded_file($_FILES[$keyName]['tmp_name'], $location)) {
+        if (!move_uploaded_file($_FILES[$this->keyName]['tmp_name'], $location)) {
             throw new RuntimeException('Failed to move uploaded file.');
         }
 
