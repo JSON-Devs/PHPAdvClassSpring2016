@@ -1,28 +1,13 @@
 <?php
 
-class AddressResoruce implements IRestModel {
+class AddressResoruce extends DB implements IRestModel {
     
-      private $db;
-
     function __construct() {
         
         $util = new Util();
-        $dbo = new DB($util->getDBConfig());
-        $this->setDb($dbo->getDB());        
+        $this->setDbConfig($util->getDBConfig());              
     }
 
-    private function getDb() {
-        return $this->db;
-    }
-
-    private function setDb($db) {
-        $this->db = $db;
-    }
-
-    
-    
-    
-    
     public function getAll() {
         $stmt = $this->getDb()->prepare("SELECT * FROM address");
         $results = array();      

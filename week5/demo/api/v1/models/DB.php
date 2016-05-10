@@ -10,7 +10,7 @@
 class DB {
     
     protected $db = null;
-    private $dbConfig = array();
+    protected $dbConfig = array();
    
      
     /**
@@ -22,11 +22,11 @@ class DB {
         $this->setDbConfig($dbConfig);      
     }
     
-    private function getDbConfig() {
+    protected function getDbConfig() {
         return $this->dbConfig;
     }
 
-    private function setDbConfig($dbConfig) {
+    protected function setDbConfig($dbConfig) {
         $this->dbConfig = $dbConfig;
     }
     

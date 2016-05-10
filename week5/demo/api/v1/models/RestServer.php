@@ -114,9 +114,9 @@ class RestServer {
     }
 
     
-    public function outputReponse() {
+    public function getReponse() {
         header("HTTP/1.1 " . $this->getStatus() . " " . $this->status_codes[$this->getStatus()]);
-        echo json_encode($this->response, JSON_PRETTY_PRINT);
+        return json_encode($this->response, JSON_PRETTY_PRINT);
     }
     
     private function getRestArgs() {
