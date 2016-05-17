@@ -1,6 +1,6 @@
 <?php
 
-class AddressResoruce extends DB implements IRestModel {
+class CorpsResoruce extends DB implements IRestModel {
     
     function __construct() {
         
@@ -14,6 +14,9 @@ class AddressResoruce extends DB implements IRestModel {
         if ($stmt->execute() && $stmt->rowCount() > 0) {
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
+        else{
+            throw new Exception('All Corps could not be obtained');
+        }
         return $results;
     }
     
@@ -25,6 +28,9 @@ class AddressResoruce extends DB implements IRestModel {
         $results = array(); 
         if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
             $results = $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        else{
+            throw new Exception('Corp could not be obtained');
         }
         
         return $results;
@@ -43,37 +49,52 @@ class AddressResoruce extends DB implements IRestModel {
             ":location" => $serverData['location']
         );
 
+        $results = array();
         if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
-            return true;
-        } 
-        return false;
+            $results = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $results;
+        }
+        else{
+            throw new Exception('Corp could not be added');
+        }
+        
     }
     public function put($id, $serverData){
-        $stmt = $this->getDb()->prepare("INSERT INTO address SET fullname = :fullname, email = :email, addressline1 = :addressline1, city = :city, state = :state, zip = :zip, birthday = :birthday WHERE address_id = :address_id" );
+        $stmt = $this->getDb()->prepare("UPDATE corps SET corp = :corp, incorp_dt = :incorp_dt, email = :email, owner = :owner, phone = :phone, location = :location WHERE id = :id" );
+        //INSERT INTO corps`(`corp`, `incorp_dt`, `email`, `owner`, `phone`, `location`) VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6]) WHERE id = :id
         $binds = array(
-            ":fullname" => $serverData['fullname'],
+            ":corp" => $serverData['corp'],
+            ":incorp_dt" => $serverData['incorp_dt'],
             ":email" => $serverData['email'],
-            ":addressline1" => $serverData['addressline1'],
-            ":city" => $serverData['city'],
-            ":state" => $serverData['state'],
-            ":zip" => $serverData['zip'],
-            ":birthday" => $serverData['birthday'],
-            ":address_id" => $id
+            ":owner" => $serverData['owner'],
+            ":phone" => $serverData['phone'],
+            ":location" => $serverData['location'],
+            ":id" => $id
         );
         
+        $results = array();
         if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
-            return true;
+            $results = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $results;
         } 
-        return false;
+        else{
+            throw new Exception('Corp could not be updated');
+            
+        }
+        
     }
     public function delete($id){
-        $stmt = $this->getDb()->prepare("DELETE * FROM corps WHERE id = :id");
+        $stmt = $this->getDb()->prepare("DELETE FROM corps WHERE id = :id");
         $binds = array(":id" => $id);
 
+        //$results = array();
         if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
-            return true;
+            $results = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $results;
         }
-        return false;
+        else{
+            throw new Exception('Corp could not be deleted');
+        }
     }
     
 }

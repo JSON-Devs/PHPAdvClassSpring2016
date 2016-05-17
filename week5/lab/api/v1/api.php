@@ -30,9 +30,9 @@ try {
      * But in this example we will just code it out.
      * 
      */
-    if ( 'address' === $resource ) {
+    if ( 'corps' === $resource ) {
         
-        $resourceData = new AddressResoruce();
+        $resourceData = new CorpsResoruce();
         
         if ( 'GET' === $verb ) {
             
@@ -52,10 +52,10 @@ try {
             
 
             if ($resourceData->post($serverData)) {
-                $restServer->setMessage('Address Added');
+                $restServer->setMessage('Corp Added');
                 $restServer->setStatus(201);
             } else {
-                throw new Exception('Address could not be added');
+                throw new Exception('Corp could not be added');
             }
         
         }
@@ -64,7 +64,23 @@ try {
         if ( 'PUT' === $verb ) {
             
             if ( NULL === $id ) {
-                throw new InvalidArgumentException('Address ID ' . $id . ' was not found');
+                throw new InvalidArgumentException('Corp ID ' . $id . ' was not found');
+            }
+            if ($resourceData->put($id, $serverData)){
+                $restServer->setMessage('Corp Updated');
+                $restServer->setStatus(202);
+            }
+            //echo var_dump($id);
+        }
+        
+        if ( 'DELETE' === $verb ) {
+            
+            if ( NULL === $id ) {
+                throw new InvalidArgumentException('Corp ID ' . $id . ' was not found');
+            }
+            if($resourceData->delete($id)){
+                $restServer->setMessage('Corp Deleted');
+                $restServer->setStatus(200);
             }
             
         }

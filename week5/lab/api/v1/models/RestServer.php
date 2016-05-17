@@ -86,7 +86,7 @@ class RestServer {
         }
     }
 
-        public function setMessage($message) {
+    public function setMessage($message) {
         $this->response["message"] = $message;
     }
     public function setErrors($errors) {
