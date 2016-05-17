@@ -49,13 +49,11 @@ class CorpsResoruce extends DB implements IRestModel {
             ":location" => $serverData['location']
         );
 
-        $results = array();
         if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
-            $results = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $results;
+            return true;
         }
         else{
-            throw new Exception('Corp could not be added');
+            return false;
         }
         
     }
@@ -72,13 +70,11 @@ class CorpsResoruce extends DB implements IRestModel {
             ":id" => $id
         );
         
-        $results = array();
         if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
-            $results = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $results;
+            return true;
         } 
         else{
-            throw new Exception('Corp could not be updated');
+            return false;
             
         }
         
@@ -87,13 +83,11 @@ class CorpsResoruce extends DB implements IRestModel {
         $stmt = $this->getDb()->prepare("DELETE FROM corps WHERE id = :id");
         $binds = array(":id" => $id);
 
-        //$results = array();
         if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
-            $results = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $results;
+            return true;
         }
         else{
-            throw new Exception('Corp could not be deleted');
+            return false;
         }
     }
     
