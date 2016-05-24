@@ -132,6 +132,17 @@ class DBSpring extends DB {
         return $results;
         
     }
+    
+    function getAllMemes(){
+         $db = $this->getDb();
+        $stmt = $db->prepare("SELECT filename, title FROM photos");
+        $results = array();
+        if ($stmt->execute() && $stmt->rowCount() > 0) {
+           $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return $results;
+        
+    }
     function getUsersMemeNames($userID){
          $db = $this->getDb();
         $stmt = $db->prepare("SELECT filename FROM photos WHERE user_id = :user_id");
@@ -152,20 +163,23 @@ class DBSpring extends DB {
         $binds = array(
             ":filename" => $filename,
         );
-        $results = array();
+        
         if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
-           $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+           return true;
         }
-        return $results;
+        else {
+            return false;
+        }
         
     }
     
     function addMeme($userID, $fileName, $title) {
         $now = date("Y-m-d H:i:s");
         $db = $this->getDb();
-        $stmt = $db->prepare("INSERT INTO photos SET photo_id = NULL, user_id = :user_id, title = :title, views = 0, created = :created");
+        $stmt = $db->prepare("INSERT INTO photos(photo_id, user_id, filename, title, views, created) VALUES (NULL, :user_id, :filename, :title, '0', :created)");
         $binds = array(
             ":user_id" => $userID,
+            ":filename" => $fileName,
             ":title" => $title,
             ":created" => $now,
         );

@@ -41,7 +41,10 @@
                 <?php if ( $fileInfo->getExtension() == "jpg" || $fileInfo->getExtension() == "png" || $fileInfo->getExtension() == "gif" ) : ?>
                     <img src="<?php echo $fileInfo->getPathname(); ?>" />
                 <?php endif; ?>
-                
+                    <br/>
+                    <a href="mailto:someone@example.com?Subject=Memes!" target="_top">Send as an email</a>
+                <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-dnt="true">Tweet</a>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                     
             <?php endif; ?>
         <?php endforeach; ?>

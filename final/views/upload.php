@@ -74,11 +74,11 @@ try {
     $salt = uniqid(mt_rand(), true);
     $fileName = 'img_' . sha1($salt . sha1_file($_FILES['upfile']['tmp_name']));
     
-    if (!is_dir('./uploads')) {
-        mkdir('./uploads');
+    if (!is_dir('../uploads')) {
+        mkdir('../uploads');
     }
 
-    $location = sprintf('./uploads/%s.%s', $fileName, $ext);
+    $location = sprintf('../uploads/%s.%s', $fileName, $ext);
 
     switch ($ext) {
         case "jpg" :
@@ -183,8 +183,9 @@ try {
             break;
     }
 
-
-    if(!$db->addMeme($_SESSION['user_id'], $fileName, $title)){
+    $upFileName = $fileName . '.' . $ext;
+    $userID = filter_input(INPUT_POST, 'id');
+    if(!$db->addMeme($userID, $upFileName, $title)){
         throw new RuntimeException("Error writing to db");
     }
 

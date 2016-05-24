@@ -10,11 +10,9 @@
     <style>
             .meme {
                 width: 300px; 
-                border: 1px solid silver;
-                padding: 0.5em;
                 text-align: center;
-                margin: 0.5em;
                 vertical-align: middle;
+                
             }
 
 
@@ -46,8 +44,13 @@
         }
         
         $titles = $db->getAllTitles();
+        $randomMeme = $db->getAllMemes();
+        $maxMeme = sizeof($randomMeme)-1;
+        $randomNumberMeme = rand(0, $maxMeme);
+        //var_dump($randomMeme[$randomNumberMeme]['filename']);
         ?>
         <div class="container">
+            <?php if(!isset($_SESSION['user_id'])): ?>
             <br/>
             <a href="./views/signup.php">Sign Up</a>
             <br/>
@@ -57,6 +60,16 @@
                 Password: <input type="password" name="pass" value="<?php echo $pass; ?>" /> <br />
                 <input type="submit" value="Login" class="btn btn-primary" />
             </form>
+            <?php endif; ?>
+            <?php if(isset($_SESSION['user_id'])): ?>
+            <a href="./loggedIn.php">View My Memes</a>
+            <?php endif; ?>
+            <h2>Featured Meme</h2>
+            <a href="views/viewMeme.php?fileName=<?php echo $randomMeme[$randomNumberMeme]['filename']; ?>"><img src="uploads/<?php echo $randomMeme[$randomNumberMeme]['filename']; ?>" /></a>
+            <br/><?php echo $randomMeme[$randomNumberMeme]['title'];?>
+            <br/>
+            <br/>
+            <h2>All Memes</h2>
             <?php
                 $files = array();
                 $directory = '.' . DIRECTORY_SEPARATOR . 'uploads';
@@ -68,29 +81,29 @@
                 }
 
                 krsort($files);
-
-                foreach ($files as $key => $path):
-                    ?> 
+                if(sizeof($files) == 0):?>
+                    <br /><h1>No meme's to show</h1>
+                <?php endif; ?>
+                <?php foreach ($files as $key => $path):?> 
                     <div class="meme"> 
-                        <a href="views/viewMeme.php?fileName=<?php echo $key ?>"><img src="<?php echo $path; ?>" /></a> <br />
+                        <a href="views/viewMeme.php?fileName=<?php echo $key ?>"><img src="<?php echo $path; ?>" /></a>
                         <?php 
                         $arraySize = sizeof($titles);
-                    for($i=0; $i < $arraySize; $i++) {
-                        if($titles[$i]['filename'] == $key){
-                            echo $titles[$i]['title'];
+                        for($i=0; $i < $arraySize; $i++) {
+                            if($titles[$i]['filename'] == $key){
+                                echo $titles[$i]['title'];
+                            }
                         }
-                    }
                         
                         //echo $key; ?>
-                        <!-- Place this tag where you want the share button to render. -->
-                        <div class="g-plus" data-action="share" data-href="<?php echo $path; ?>"></div> 
+                         
                     </div>
 
                 <?php endforeach; ?>
+            
 
 
         </div>
-        <!-- Place this tag in your head or just before your close body tag. -->
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        
     </body>
 </html>

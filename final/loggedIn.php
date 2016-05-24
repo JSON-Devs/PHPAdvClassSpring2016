@@ -18,25 +18,33 @@
         $directory = scandir('./uploads');
         
         if (array_key_exists('deleteFile', $_POST)) {
-            $fileName = $folder . "/" . filter_input(INPUT_POST, 'deleteFile');
-            if (file_exists($fileName && $db->deletePhoto($fileName))){
-                unlink($fileName);
-                echo "<h2>File" . $fileName . " Deleted</h2>";
+            $fileName = filter_input(INPUT_POST, 'deleteFile');
+            $fileFolderName = $folder . "/" . filter_input(INPUT_POST, 'deleteFile');
+            if (file_exists($fileFolderName)){
+                unlink($fileFolderName);
+                $db->deletePhoto($fileName);
+                echo "<h2>File " . $fileName . " Deleted</h2>";
             }
             else{
-                echo "<h2>File". $fileName . " Not Deleted</h2>";
+                echo "<h2>File ". $fileName . " Not Deleted</h2>";
             }
         }
         
-        if ( !$db->isLoggedIn() ){
-            $util->redirect("index.php");
-        }
-        if( $db->isPostRequest() ){
+        if (array_key_exists('logOut', $_POST)) {
             unset($_SESSION['loggedin']);
             unset($_SESSION['user_id']);
             session_destroy();
             $util->redirect("index.php");
         }
+        if ( !$db->isLoggedIn() ){
+            $util->redirect("index.php");
+        }
+        //if( $db->isPostRequest() ){
+        //    unset($_SESSION['loggedin']);
+        //    unset($_SESSION['user_id']);
+        //    session_destroy();
+        //    $util->redirect("index.php");
+        //}
         
         $memes = $db->getUsersMemes($_SESSION['user_id']);
         $noOfMemes = sizeof($memes);
@@ -44,11 +52,13 @@
         <div class="container">
             <br />
             <h1>Logged in! Welcome!</h1>
-            <form action="#" method="post">   
+            <form action="#" method="post">
+                <input type="hidden" name="logOut" />
                 <input type="submit" value="Log out" class="btn btn-primary" />
             </form>
             <br />
-            <a href="./views/uploadImage.php">Upload a Meme</a>
+            <a href="./views/uploadImage.php">Upload a Meme</a><br/>
+            <a href="./index.php">View All Memes</a>
             <br />
             <?php for($i=0; $i<$noOfMemes; $i++):?>
             <h2><?php echo $memes[$i]['title']; ?></h2>
@@ -59,7 +69,7 @@
                     <input type="hidden" value="<?php echo $memes[$i]['filename']; ?>" name="deleteFile" />
                     <input type="submit" value="Delete File" class="btn btn-danger"/>
                 </form>
-                <img src="./uploads/<?php echo $memes[$i]['filename']?>"/>
+                <img src="./uploads/<?php echo $memes[$i]['filename'];?>"/>
             <?php endfor; ?>
         </div>
     </body>

@@ -29,9 +29,16 @@
         </style>
     </head>
     <body>
+        <?php 
+        session_start();
+        
+        if ( !isset($_SESSION['user_id']) ){
+            $util->redirect("index.php");
+        }
+        ?>
         <h2>Image Files</h2>
         <p>
-            <a href="view.php">View Images</a>
+            <a href="../loggedIn.php">Back</a>
         </p>
         <p>
         <form>
@@ -207,6 +214,7 @@
             formData.append('upfile', data);
             formData.append(memeTopText.name, memeTopText.value);
             formData.append(memeBottomText.name, memeBottomText.value);
+            formData.append('id', '<?php echo $_SESSION['user_id']; ?>');
 
             xmlhttp.open(verb, url, true);
             xmlhttp.send(formData);
