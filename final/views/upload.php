@@ -132,7 +132,8 @@ try {
 
     $memetop = filter_input(INPUT_POST, 'memetop');
     $memebottom = filter_input(INPUT_POST, 'memebottom');
-    $title = $memetop. " " . $memebottom;
+    $title = filter_input(INPUT_POST, 'title');
+    
 //Font Color (white in this case)
     $textcolor = imagecolorallocate($image_p, 255, 255, 255);
     $bgcolor = imagecolorallocate($image_p, 0, 0, 0);

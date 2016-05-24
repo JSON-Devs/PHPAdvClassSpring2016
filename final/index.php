@@ -64,42 +64,27 @@
             <?php if(isset($_SESSION['user_id'])): ?>
             <a href="./loggedIn.php">View My Memes</a>
             <?php endif; ?>
+            <?php if($maxMeme != -1): ?>
             <h2>Featured Meme</h2>
             <a href="views/viewMeme.php?fileName=<?php echo $randomMeme[$randomNumberMeme]['filename']; ?>"><img src="uploads/<?php echo $randomMeme[$randomNumberMeme]['filename']; ?>" /></a>
             <br/><?php echo $randomMeme[$randomNumberMeme]['title'];?>
             <br/>
             <br/>
+            <?php endif; ?>
             <h2>All Memes</h2>
             <?php
-                $files = array();
-                $directory = '.' . DIRECTORY_SEPARATOR . 'uploads';
-                $dir = new DirectoryIterator($directory);
-                foreach ($dir as $fileInfo) {
-                    if ($fileInfo->isFile()) {
-                        $files[$fileInfo->getFilename()] = $fileInfo->getPathname();
-                    }
-                }
-
-                krsort($files);
-                if(sizeof($files) == 0):?>
+                $arraySize = sizeof($titles);
+                if($arraySize == 0):?>
                     <br /><h1>No meme's to show</h1>
                 <?php endif; ?>
-                <?php foreach ($files as $key => $path):?> 
+                <?php for($i=0; $i <= $arraySize - 1; $i++):?> 
                     <div class="meme"> 
-                        <a href="views/viewMeme.php?fileName=<?php echo $key ?>"><img src="<?php echo $path; ?>" /></a>
-                        <?php 
-                        $arraySize = sizeof($titles);
-                        for($i=0; $i < $arraySize; $i++) {
-                            if($titles[$i]['filename'] == $key){
-                                echo $titles[$i]['title'];
-                            }
-                        }
-                        
-                        //echo $key; ?>
+                        <a href="views/viewMeme.php?fileName=<?php echo $titles[$i]['filename'] ?>"><img src="./uploads/<?php echo $titles[$i]['filename'] ?>" /></a>
+                        <?php echo $titles[$i]['title'];?>
                          
                     </div>
 
-                <?php endforeach; ?>
+                <?php endfor; ?>
             
 
 

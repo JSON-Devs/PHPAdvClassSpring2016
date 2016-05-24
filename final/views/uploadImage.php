@@ -31,9 +31,11 @@
     <body>
         <?php 
         session_start();
-        
-        if ( !isset($_SESSION['user_id']) ){
-            $util->redirect("index.php");
+        require_once '../autoload.php';
+        $db = new DBSpring();
+        $util = new Util();
+        if ( !$db->isLoggedIn() ){
+            $util->redirect("../index.php");
         }
         ?>
         <h2>Image Files</h2>
@@ -42,6 +44,7 @@
         </p>
         <p>
         <form>
+            <input type="text" placeholder="Title" name="title" value="" required="required" /> <br />
             <input type="text" placeholder="Meme Top text" name="memetop" value="" required="required" /> <br />
             <input type="text" placeholder="Meme Botom text" name="memebottom" value="" required="required" /> 
             <br />
@@ -88,6 +91,7 @@
         var fileUpload = document.querySelector('input[name="picked"]');
         var fileContentPaneImg = document.querySelector('#img-file-content');
         var uploadProgress = document.querySelector('.progress');
+        var title = document.querySelector('input[name="title"]');
         var memeTopText = document.querySelector('input[name="memetop"]');
         var memeBottomText = document.querySelector('input[name="memebottom"]');
         var SubmitBtn = document.querySelector('input[type="button"]');
@@ -212,6 +216,7 @@
             var url = 'upload.php';
             var formData = new FormData();
             formData.append('upfile', data);
+            formData.append(title.name, title.value);
             formData.append(memeTopText.name, memeTopText.value);
             formData.append(memeBottomText.name, memeBottomText.value);
             formData.append('id', '<?php echo $_SESSION['user_id']; ?>');

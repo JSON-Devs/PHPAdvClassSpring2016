@@ -39,12 +39,6 @@
         if ( !$db->isLoggedIn() ){
             $util->redirect("index.php");
         }
-        //if( $db->isPostRequest() ){
-        //    unset($_SESSION['loggedin']);
-        //    unset($_SESSION['user_id']);
-        //    session_destroy();
-        //    $util->redirect("index.php");
-        //}
         
         $memes = $db->getUsersMemes($_SESSION['user_id']);
         $noOfMemes = sizeof($memes);
@@ -60,10 +54,17 @@
             <a href="./views/uploadImage.php">Upload a Meme</a><br/>
             <a href="./index.php">View All Memes</a>
             <br />
+            <?php 
+                
+            ?>
             <?php for($i=0; $i<$noOfMemes; $i++):?>
             <h2><?php echo $memes[$i]['title']; ?></h2>
+            <?php 
+                $file = '.'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.$memes[$i]['filename'];
+                $info = new SplFileInfo($file);
+            ?>
                 <p>Views: <?php echo $memes[$i]['views']; ?></p>
-                <p>uploaded on <?php echo $memes[$i]['created']; ?></p>
+                <p>uploaded on <?php echo date("l F j, Y, g:i a", $info->getMTime()); ?></p>
                 </br>
                 <form method="post">
                     <input type="hidden" value="<?php echo $memes[$i]['filename']; ?>" name="deleteFile" />
