@@ -32,7 +32,7 @@
         <?php 
         session_start();
         require_once '../autoload.php';
-        $db = new DBSpring();
+        $db = new DBMemes();
         $util = new Util();
         if ( !$db->isLoggedIn() ){
             $util->redirect("../index.php");

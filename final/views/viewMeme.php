@@ -12,7 +12,7 @@
     <body>
         <?php
         require_once '../autoload.php';
-        $db = new DBSpring();
+        $db = new DBMemes();
         
         $folder = '../uploads';
         if ( !is_dir($folder) ) {

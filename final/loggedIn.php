@@ -12,7 +12,7 @@
         <?php
         session_start();
         require_once './autoload.php';
-        $db = new DBSpring();
+        $db = new DBMemes();
         $util = new Util();
         $folder = './uploads';
         $directory = scandir('./uploads');
@@ -58,6 +58,7 @@
                 
             ?>
             <?php for($i=0; $i<$noOfMemes; $i++):?>
+            <hr>
             <h2><?php echo $memes[$i]['title']; ?></h2>
             <?php 
                 $file = '.'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.$memes[$i]['filename'];

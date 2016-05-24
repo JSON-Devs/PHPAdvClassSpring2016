@@ -3,7 +3,8 @@ header("Access-Control-Allow-Orgin: *");
 header("Content-Type: application/json; charset=utf8");
 
 require_once '../autoload.php';
-$db = new DBSpring();
+$db = new DBMemes();
+$files = new Files('upfile');
 
 $status_codes = array(
     200 => 'OK',
@@ -18,84 +19,15 @@ $status = 200;
 
 try {
 
-// Undefined | Multiple Files | $_FILES Corruption Attack
-// If this request falls under any of them, treat it invalid.
-    if (!isset($_FILES['upfile']['error']) || is_array($_FILES['upfile']['error'])) {
-        throw new RuntimeException('Invalid parameters.');
-    }
-
-// Check $_FILES['upfile']['error'] value.
-    switch ($_FILES['upfile']['error']) {
-        case UPLOAD_ERR_OK:
-            break;
-        case UPLOAD_ERR_NO_FILE:
-            throw new RuntimeException('No file sent.');
-        case UPLOAD_ERR_INI_SIZE:
-        case UPLOAD_ERR_FORM_SIZE:
-            throw new RuntimeException('Exceeded filesize limit.');
-        default:
-            throw new RuntimeException('Unknown errors.');
-    }
-
-// You should also check filesize here. 10mb
-    if ($_FILES['upfile']['size'] > 10000000) {
-        throw new RuntimeException('Exceeded filesize limit.');
-    }
-
-// DO NOT TRUST $_FILES['upfile']['mime'] VALUE !!
-// Check MIME Type by yourself.
-    /*
-      $finfo = new finfo(FILEINFO_MIME_TYPE);
-      $validExts = array(
-      'jpg' => 'image/jpeg',
-      'png' => 'image/png',
-      'gif' => 'image/gif',
-      );
-      $ext = array_search( $finfo->file($_FILES['upfile']['tmp_name']), $validExts, true );
-
-      if ( false === $ext ) {
-      throw new RuntimeException('Invalid file format.');
-      }
-     */
-
-    /* Alternative to getting file extention */
-    $name = $_FILES["upfile"]["name"];
-    $ext = strtolower(end((explode(".", $name))));
-
-    if (preg_match("/^(jpeg|jpg|png|gif)$/", $ext) == false) {
-        throw new RuntimeException('Invalid file format.');
-    }
-    /* Alternative END */
-
-// You should name it uniquely.
-// DO NOT USE $_FILES['upfile']['name'] WITHOUT ANY VALIDATION !!
-// On this example, obtain safe unique name from its binary data.
-
-    $salt = uniqid(mt_rand(), true);
-    $fileName = 'img_' . sha1($salt . sha1_file($_FILES['upfile']['tmp_name']));
-    
-    if (!is_dir('../uploads')) {
-        mkdir('../uploads');
-    }
+    $files->fileErrorsCheck();
+    $files->fileSizeCheck();
+    $ext = $files->getExt();
+    $fileName = $files->getFileName();
+    $files->dirCheck();
 
     $location = sprintf('../uploads/%s.%s', $fileName, $ext);
 
-    switch ($ext) {
-        case "jpg" :
-        case "jpeg" :
-            $rImg = imagecreatefromjpeg($_FILES["upfile"]["tmp_name"]);
-            break;
-        case "gif" :
-            $rImg = imagecreatefromgif($_FILES["upfile"]["tmp_name"]);
-            break;
-        case "png" :
-            $rImg = imagecreatefrompng($_FILES["upfile"]["tmp_name"]);
-            break;
-
-        default :
-            throw new RuntimeException("Error Bad Extention");
-            break;
-    }
+    $rImg = $files->extCheck($ext);
 
 
 

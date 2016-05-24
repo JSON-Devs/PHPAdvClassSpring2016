@@ -23,7 +23,7 @@
         <?php
         session_start();
         require_once './autoload.php';
-        $db = new DBSpring();
+        $db = new DBMemes();
         $util = new Util();
         
         //Initilize all vairables
