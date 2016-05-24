@@ -33,16 +33,19 @@
         <?php 
         $file = '..'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.$memeInfo[0]['filename'];
         $info = new SplFileInfo($file);
-
+        $sizeBytes = $info->getSize();
+        $size = $sizeBytes/1024;
         ?>
         <h2><?php echo $memeInfo[0]['title']; ?></h2>
         <p>Views: <?php echo $viewCount; ?></p>
         <p>uploaded on <?php echo date("l F j, Y, g:i a", $info->getMTime()); ?></p>
-        <p>This file is <?php echo $info->getSize(); ?> byte's</p>
+        <p>This file is <?php echo $size; ?> KB</p>
         <br/>
         <img src="../uploads/<?php echo $memeInfo[0]['filename']; ?>" />
         <br/>
-        <a href="mailto:someone@example.com?Subject=Memes!" target="_top">Send as an email</a>
+        <?php $link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>
+        <a href="mailto:someone@example.com?subject=Summer%20Party&body=Check%20out%20this%20awesome%20meme%20I%20found!%20<?php echo $link; ?>" target="_top">Email this to someone!</a>
+        <br/>
         <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-dnt="true">Tweet</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     </body>

@@ -9,10 +9,11 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
     <style>
             .meme {
-                width: 300px; 
+                width: 350px; 
                 text-align: center;
                 vertical-align: middle;
-                
+                border: 2px solid black;
+                padding: 15px;
             }
 
 
@@ -66,8 +67,10 @@
             <?php endif; ?>
             <?php if($maxMeme != -1): ?>
             <h2>Featured Meme</h2>
-            <a href="views/viewMeme.php?fileName=<?php echo $randomMeme[$randomNumberMeme]['filename']; ?>"><img src="uploads/<?php echo $randomMeme[$randomNumberMeme]['filename']; ?>" /></a>
-            <br/><?php echo $randomMeme[$randomNumberMeme]['title'];?>
+            <div class="meme"> 
+                <a href="views/viewMeme.php?fileName=<?php echo $randomMeme[$randomNumberMeme]['filename']; ?>"><img src="uploads/<?php echo $randomMeme[$randomNumberMeme]['filename']; ?>" /></a>
+                <br/><?php echo $randomMeme[$randomNumberMeme]['title'];?>
+            </div>
             <br/>
             <br/>
             <?php endif; ?>
@@ -79,7 +82,7 @@
                 <?php endif; ?>
                 <?php for($i=0; $i <= $arraySize - 1; $i++):?> 
                     <div class="meme"> 
-                        <a href="views/viewMeme.php?fileName=<?php echo $titles[$i]['filename'] ?>"><img src="./uploads/<?php echo $titles[$i]['filename'] ?>" /></a>
+                        <a href="views/viewMeme.php?fileName=<?php echo $titles[$i]['filename'] ?>"><img src="./uploads/<?php echo $titles[$i]['filename'] ?>" /></a><br/>
                         <?php echo $titles[$i]['title'];?>
                          
                     </div>
